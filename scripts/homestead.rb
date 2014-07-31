@@ -48,8 +48,13 @@ class Homestead
     # Install All The Configured Nginx Sites
     settings["sites"].each do |site|
       config.vm.provision "shell" do |s|
-          s.inline = "bash /vagrant/scripts/serve.sh $1 $2"
+          s.inline = "bash /vagrant/scripts/serve.sh $1 $2 $3"
           s.args = [site["map"], site["to"]]
+          if site["as"].instance_of? NilClass
+            s.args.push(site["map"])
+          else
+            s.args.push(site["as"])
+          end
       end
     end
 
